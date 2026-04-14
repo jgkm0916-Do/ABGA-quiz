@@ -1,165 +1,963 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABGA 교육 앱</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABGA 교육 모듈 | 대전보훈병원 간호교육실</title>
+  <style>
+    :root {
+      --navy: #123a63;
+      --blue: #1f5d99;
+      --blue-soft: #eaf3ff;
+      --sky: #f4f8fc;
+      --line: #d7e3f1;
+      --text: #1f2937;
+      --muted: #5b6677;
+      --good: #e9f8ef;
+      --good-border: #8ac7a0;
+      --bad: #fff1f2;
+      --bad-border: #f2b0ba;
+      --card: #ffffff;
+      --shadow: 0 10px 24px rgba(18, 58, 99, 0.08);
+      --radius: 18px;
+    }
 
-<style>
-body {
-  font-family: Arial;
-  background: #f4f7fb;
-  padding: 20px;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.container {
-  max-width: 700px;
-  margin: auto;
-}
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", Arial, sans-serif;
+      background: linear-gradient(180deg, #f5f8fc 0%, #eef4fa 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
 
-.banner {
-  text-align: center;
-  background: #0f4c81;
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  font-weight: bold;
-}
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 18px;
+    }
 
-.section {
-  background: white;
-  padding: 15px;
-  margin-top: 15px;
-  border-radius: 10px;
-}
+    .top-banner {
+      background: linear-gradient(135deg, #164a7d, #123a63);
+      color: #fff;
+      text-align: center;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      letter-spacing: 0.2px;
+    }
 
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
+    .hero {
+      background: linear-gradient(135deg, #ffffff, #edf5ff);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
 
-.correct { background: #c8f7c5; }
-.wrong { background: #ffcdd2; }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      color: var(--navy);
+    }
 
-.feedback {
-  margin-top: 10px;
-  display: none;
-}
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
 
-</style>
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      box-shadow: 0 4px 10px rgba(18, 58, 99, 0.05);
+    }
+
+    .tab-btn:hover {
+      background: var(--blue-soft);
+    }
+
+    .tab-btn.active {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+
+    .panel {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 28px;
+      color: var(--navy);
+    }
+
+    .section-desc {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: #fbfdff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: var(--navy);
+    }
+
+    .card p {
+      margin: 8px 0 0;
+      font-size: 15px;
+      color: #384557;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--blue-soft);
+      color: var(--blue);
+      border: 1px solid #c7dbf3;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    details.edu-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: #fbfdff;
+      margin-bottom: 12px;
+    }
+
+    details.edu-item[open] {
+      background: #f4f9ff;
+    }
+
+    details.edu-item summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 17px;
+    }
+
+    .step-wrap {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: #fbfdff;
+    }
+
+    .step-card h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 18px;
+    }
+
+    .option-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .option-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #24364d;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .option-btn:hover {
+      background: var(--blue-soft);
+    }
+
+    .feedback {
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 13px 14px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.good {
+      background: var(--good);
+      border: 1px solid var(--good-border);
+      color: #155b36;
+    }
+
+    .feedback.bad {
+      background: var(--bad);
+      border: 1px solid var(--bad-border);
+      color: #8b1f34;
+    }
+
+    .case-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fbfdff;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .case-title {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: var(--navy);
+    }
+
+    .abga-box {
+      margin: 12px 0;
+      background: #f0f7ff;
+      border: 1px solid #cfe0f3;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .abga-chip {
+      background: #fff;
+      border: 1px solid #d8e5f3;
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-width: 120px;
+    }
+
+    .abga-chip strong {
+      display: block;
+      color: var(--navy);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .question-list {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      color: #384557;
+      font-size: 15px;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .meta-pill {
+      background: #f1f7ff;
+      border: 1px solid #cfe0f3;
+      color: var(--navy);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .quiz-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fbfdff;
+      padding: 20px;
+    }
+
+    .quiz-type {
+      font-size: 13px;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .quiz-question {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .quiz-question small {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 6px;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #24364d;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .choice-btn:hover {
+      background: var(--blue-soft);
+    }
+
+    .choice-btn.correct {
+      background: var(--good);
+      border-color: var(--good-border);
+      color: #155b36;
+      font-weight: 700;
+    }
+
+    .choice-btn.incorrect {
+      background: var(--bad);
+      border-color: var(--bad-border);
+      color: #8b1f34;
+      font-weight: 700;
+    }
+
+    .quiz-feedback {
+      margin-top: 14px;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: none;
+      font-size: 15px;
+    }
+
+    .quiz-feedback.good {
+      display: block;
+      background: var(--good);
+      border: 1px solid var(--good-border);
+      color: #155b36;
+    }
+
+    .quiz-feedback.bad {
+      display: block;
+      background: var(--bad);
+      border: 1px solid var(--bad-border);
+      color: #8b1f34;
+    }
+
+    .quiz-feedback .explain {
+      margin-top: 8px;
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #0f3153;
+    }
+
+    .btn-secondary {
+      background: #e8eef5;
+      color: #334155;
+    }
+
+    .btn-secondary:hover {
+      background: #dce5ef;
+    }
+
+    .result-box {
+      margin-top: 18px;
+      display: none;
+      background: #edf6ff;
+      border: 1px solid #cfe0f3;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .result-box h3 {
+      margin: 0 0 10px;
+      color: var(--navy);
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .quiz-question {
+        font-size: 19px;
+      }
+
+      .container {
+        padding: 14px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
+  <div class="container">
+    <div class="top-banner">대전보훈병원 간호교육실</div>
 
-<div class="banner">대전보훈병원 간호교육실</div>
+    <section class="hero">
+      <h1>ABGA 교육 모듈</h1>
+      <p>기초 이해부터 임상 적용까지 단계적으로 학습하는 재직간호사 대상 ABGA 교육용 웹앱입니다.</p>
+    </section>
 
-<div class="section">
-<h2>ABGA 기초 이해</h2>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('basic', this)">기초 학습</button>
+      <button class="tab-btn" onclick="showTab('interpret', this)">해석 훈련</button>
+      <button class="tab-btn" onclick="showTab('compensation', this)">보상반응</button>
+      <button class="tab-btn" onclick="showTab('cases', this)">임상 케이스</button>
+      <button class="tab-btn" onclick="showTab('quiz', this)">퀴즈</button>
+    </div>
 
-<details><summary>pH</summary>
-pH 7.35~7.45 정상<br>
-↓ 산증 / ↑ 알칼리증
-</details>
+    <section id="basic" class="panel active">
+      <h2 class="section-title">기초 학습</h2>
+      <p class="section-desc">ABGA 해석에 필요한 핵심 개념만 먼저 빠르게 정리합니다.</p>
 
-<details><summary>CO₂</summary>
-호흡성 지표<br>
-↑ 산증 / ↓ 알칼리
-</details>
+      <details class="edu-item" open>
+        <summary>pH</summary>
+        <p>정상 범위는 <strong>7.35~7.45</strong>입니다.</p>
+        <p><strong>7.35보다 낮으면 산증</strong>, <strong>7.45보다 높으면 알칼리증</strong>입니다.</p>
+        <div class="badge-row">
+          <span class="badge">정상 7.35~7.45</span>
+          <span class="badge">↓ 산증</span>
+          <span class="badge">↑ 알칼리증</span>
+        </div>
+      </details>
 
-<details><summary>HCO₃</summary>
-대사성 지표<br>
-↑ 알칼리 / ↓ 산증
-</details>
+      <details class="edu-item">
+        <summary>PaCO₂</summary>
+        <p>PaCO₂는 <strong>호흡성 요인</strong>을 반영합니다.</p>
+        <p>증가하면 산성 방향, 감소하면 알칼리 방향으로 작용합니다.</p>
+        <div class="badge-row">
+          <span class="badge">호흡성 지표</span>
+          <span class="badge">↑ 산성</span>
+          <span class="badge">↓ 알칼리</span>
+        </div>
+      </details>
 
-<details><summary>해석 순서</summary>
-pH → CO₂ → HCO₃
-</details>
+      <details class="edu-item">
+        <summary>HCO₃⁻</summary>
+        <p>HCO₃⁻는 <strong>대사성 요인</strong>을 반영합니다.</p>
+        <p>증가하면 알칼리 방향, 감소하면 산성 방향으로 작용합니다.</p>
+        <div class="badge-row">
+          <span class="badge">대사성 지표</span>
+          <span class="badge">↑ 알칼리</span>
+          <span class="badge">↓ 산성</span>
+        </div>
+      </details>
 
-<details><summary>보상반응</summary>
-반대로 움직이면 보상<br>
-※ pH 완전 정상 안됨
-</details>
+      <details class="edu-item">
+        <summary>해석 순서</summary>
+        <p><strong>pH → PaCO₂ → HCO₃⁻</strong> 순서로 확인합니다.</p>
+        <p>이 순서를 지키면 해석이 훨씬 명확해집니다.</p>
+      </details>
 
-</div>
+      <details class="edu-item">
+        <summary>주의점</summary>
+        <p>pH가 정상 범위에 있어도 이상이 없다고 단정할 수 없습니다.</p>
+        <p>보상반응이나 혼합장애 가능성을 고려해 전체 수치를 함께 봐야 합니다.</p>
+      </details>
+    </section>
 
-<div class="section">
-<h2>ABGA 퀴즈</h2>
+    <section id="interpret" class="panel">
+      <h2 class="section-title">해석 훈련</h2>
+      <p class="section-desc">순서대로 생각하는 연습을 통해 ABGA 해석 흐름을 몸에 익힙니다.</p>
 
-<div id="question"></div>
-<div id="choices"></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>연습용 수치</h3>
+          <div class="abga-box">
+            <div class="abga-chip"><strong>pH</strong>7.28</div>
+            <div class="abga-chip"><strong>PaCO₂</strong>55 mmHg</div>
+            <div class="abga-chip"><strong>HCO₃⁻</strong>24 mEq/L</div>
+          </div>
+          <p>위 수치를 보고 단계별로 해석해보세요.</p>
+        </div>
 
-<div id="feedback" class="feedback"></div>
+        <div class="card">
+          <h3>핵심 포인트</h3>
+          <p>1. pH로 방향부터 확인합니다.</p>
+          <p>2. PaCO₂가 같은 방향이면 호흡성입니다.</p>
+          <p>3. HCO₃⁻가 같은 방향이면 대사성입니다.</p>
+        </div>
+      </div>
 
-<button onclick="next()">다음</button>
-</div>
+      <div class="step-wrap" style="margin-top:14px;">
+        <div class="step-card">
+          <h3>STEP 1. pH 방향은?</h3>
+          <div class="option-row">
+            <button class="option-btn" onclick="showStepFeedback('step1', true, '맞습니다. pH 7.28은 7.35보다 낮으므로 산증입니다.')">산증</button>
+            <button class="option-btn" onclick="showStepFeedback('step1', false, '다시 보세요. pH 7.28은 7.35보다 낮으므로 산증입니다.')">알칼리증</button>
+          </div>
+          <div id="step1" class="feedback"></div>
+        </div>
 
-</div>
+        <div class="step-card">
+          <h3>STEP 2. PaCO₂는 어떤 방향인가?</h3>
+          <div class="option-row">
+            <button class="option-btn" onclick="showStepFeedback('step2', true, '맞습니다. PaCO₂ 55는 증가되어 있고 산성 방향이므로 호흡성 원인을 시사합니다.')">산성 방향</button>
+            <button class="option-btn" onclick="showStepFeedback('step2', false, 'PaCO₂ 55는 증가된 상태입니다. 증가한 CO₂는 산성 방향입니다.')">알칼리 방향</button>
+          </div>
+          <div id="step2" class="feedback"></div>
+        </div>
 
-<script>
+        <div class="step-card">
+          <h3>STEP 3. 최종 해석은?</h3>
+          <div class="option-row">
+            <button class="option-btn" onclick="showStepFeedback('step3', true, '정답입니다. pH는 산증, PaCO₂도 산성 방향이므로 호흡성 산증입니다.')">호흡성 산증</button>
+            <button class="option-btn" onclick="showStepFeedback('step3', false, 'HCO₃⁻는 정상에 가깝고, 핵심은 PaCO₂ 증가입니다. 호흡성 산증입니다.')">대사성 산증</button>
+            <button class="option-btn" onclick="showStepFeedback('step3', false, 'pH가 낮으므로 알칼리증은 아닙니다.')">호흡성 알칼리증</button>
+          </div>
+          <div id="step3" class="feedback"></div>
+        </div>
+      </div>
+    </section>
 
-// 🔥 문제은행 (50개)
-const bank = [
-{q:"pH 7.28 CO₂ 55 HCO₃ 24",a:["호흡성 산증","대사성 산증","알칼리증","정상"],c:0,e:"CO₂↑ → 호흡성 산증"},
-{q:"pH 7.50 CO₂ 30",a:["호흡성 알칼리증","산증","정상","대사성"],c:0,e:"CO₂↓ → 알칼리"},
-{q:"COPD 환자 pH7.33 CO₂60 HCO₃32",a:["보상된 호흡성 산증","정상","대사성","알칼리"],c:0,e:"보상됨"},
-{q:"설사 환자 pH7.30 HCO₃18",a:["대사성 산증","정상","호흡성","알칼리"],c:0,e:"HCO₃↓"},
-{q:"구토 환자 pH7.48 HCO₃30",a:["대사성 알칼리","산증","정상","호흡성"],c:0,e:"HCO₃↑"},
-{q:"과호흡 pH7.48 CO₂28",a:["호흡성 알칼리","산증","정상","대사성"],c:0,e:"CO₂↓"},
-{q:"pH 정상인데 이상?",a:["가능","불가능","항상 정상","모름"],c:0,e:"보상 때문"},
-{q:"보상 특징?",a:["반대 방향","같은 방향","없음","모름"],c:0,e:"핵심"},
-{q:"ABGA 순서?",a:["pH→CO₂→HCO₃","CO₂→pH","HCO₃→CO₂","없음"],c:0,e:"기본"},
-{q:"CO₂ 의미?",a:["호흡","대사","혈압","맥박"],c:0,e:"호흡성"},
+    <section id="compensation" class="panel">
+      <h2 class="section-title">보상반응</h2>
+      <p class="section-desc">보상반응은 문제 아닌 쪽이 반대로 움직이는 현상으로 이해하는 것이 가장 쉽습니다.</p>
 
-// 👉 복붙으로 50개까지 늘리면 됨
-];
+      <div class="grid-2">
+        <div class="card">
+          <h3>핵심 개념</h3>
+          <p><strong>호흡성 문제</strong>일 때는 HCO₃⁻가 반대로 움직일 수 있습니다.</p>
+          <p><strong>대사성 문제</strong>일 때는 PaCO₂가 반대로 움직일 수 있습니다.</p>
+          <p>보상반응이 있어도 pH가 완전히 정상으로 돌아오지 않을 수 있습니다.</p>
+        </div>
 
-// 랜덤 10개
-let quiz = bank.sort(()=>0.5-Math.random()).slice(0,10);
+        <div class="card">
+          <h3>쉽게 기억하기</h3>
+          <div class="badge-row">
+            <span class="badge">문제 아닌 쪽이 반대로 움직이면 보상</span>
+            <span class="badge">호흡성 ↔ HCO₃⁻</span>
+            <span class="badge">대사성 ↔ PaCO₂</span>
+          </div>
+        </div>
+      </div>
 
-let i=0;
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="card">
+          <h3>예시 1. 보상 있는 호흡성 산증</h3>
+          <div class="abga-box">
+            <div class="abga-chip"><strong>pH</strong>7.32</div>
+            <div class="abga-chip"><strong>PaCO₂</strong>55</div>
+            <div class="abga-chip"><strong>HCO₃⁻</strong>30</div>
+          </div>
+          <p>PaCO₂는 산성 방향, HCO₃⁻는 알칼리 방향입니다.</p>
+          <p>문제 아닌 HCO₃⁻가 반대로 움직였으므로 <strong>보상 있음</strong>으로 볼 수 있습니다.</p>
+        </div>
 
-function load(){
-let q=quiz[i];
-document.getElementById("question").innerHTML="<h3>"+q.q+"</h3>";
+        <div class="card">
+          <h3>예시 2. 보상 있는 대사성 산증</h3>
+          <div class="abga-box">
+            <div class="abga-chip"><strong>pH</strong>7.30</div>
+            <div class="abga-chip"><strong>PaCO₂</strong>30</div>
+            <div class="abga-chip"><strong>HCO₃⁻</strong>16</div>
+          </div>
+          <p>HCO₃⁻는 산성 방향, PaCO₂는 알칼리 방향입니다.</p>
+          <p>문제 아닌 PaCO₂가 반대로 움직였으므로 <strong>보상 있음</strong>입니다.</p>
+        </div>
+      </div>
+    </section>
 
-let html="";
-q.a.forEach((c,idx)=>{
-html+=`<button onclick="check(${idx})">${c}</button>`;
-});
-document.getElementById("choices").innerHTML=html;
+    <section id="cases" class="panel">
+      <h2 class="section-title">임상 케이스</h2>
+      <p class="section-desc">실제 환자 상황처럼 구성된 사례를 통해 ABGA 해석을 임상 맥락과 함께 연습합니다.</p>
 
-document.getElementById("feedback").style.display="none";
-}
+      <div class="case-card">
+        <h3 class="case-title">케이스 1. 심한 설사 후 내원한 환자</h3>
+        <p><strong>환자:</strong> 67세 남자</p>
+        <p><strong>주호소:</strong> 3일간 지속된 심한 설사, 무기력감, 입마름</p>
+        <p><strong>활력징후:</strong> BP 92/58 mmHg, HR 112회/분, RR 24회/분, BT 37.2℃</p>
+        <div class="abga-box">
+          <div class="abga-chip"><strong>pH</strong>7.30</div>
+          <div class="abga-chip"><strong>PaCO₂</strong>38 mmHg</div>
+          <div class="abga-chip"><strong>HCO₃⁻</strong>18 mEq/L</div>
+        </div>
+        <ol class="question-list">
+          <li>산증인가, 알칼리증인가?</li>
+          <li>호흡성인가, 대사성인가?</li>
+          <li>가장 적절한 최종 해석은?</li>
+        </ol>
+        <details class="edu-item" style="margin-top:12px;">
+          <summary>정답 및 해설 보기</summary>
+          <p>pH가 낮으므로 산증입니다.</p>
+          <p>HCO₃⁻가 감소되어 산성 방향이므로 대사성 원인입니다.</p>
+          <p><strong>최종 해석: 대사성 산증</strong></p>
+        </details>
+      </div>
 
-function check(idx){
-let q=quiz[i];
-let fb=document.getElementById("feedback");
+      <div class="case-card">
+        <h3 class="case-title">케이스 2. COPD 악화 환자</h3>
+        <p><strong>환자:</strong> 74세 남자</p>
+        <p><strong>주호소:</strong> 호흡곤란 악화, 기침, 객담 증가</p>
+        <p><strong>병력:</strong> COPD로 외래 추적 중, 최근 감기 이후 호흡곤란 심해짐</p>
+        <p><strong>활력징후:</strong> BP 138/84 mmHg, HR 108회/분, RR 28회/분, SpO₂ 88%</p>
+        <div class="abga-box">
+          <div class="abga-chip"><strong>pH</strong>7.33</div>
+          <div class="abga-chip"><strong>PaCO₂</strong>60 mmHg</div>
+          <div class="abga-chip"><strong>HCO₃⁻</strong>32 mEq/L</div>
+        </div>
+        <ol class="question-list">
+          <li>산증인가, 알칼리증인가?</li>
+          <li>호흡성인가, 대사성인가?</li>
+          <li>보상반응이 있는가?</li>
+        </ol>
+        <details class="edu-item" style="margin-top:12px;">
+          <summary>정답 및 해설 보기</summary>
+          <p>pH가 낮아 산증입니다.</p>
+          <p>PaCO₂가 증가되어 호흡성 원인입니다.</p>
+          <p>HCO₃⁻가 반대 방향으로 증가되어 있으므로 보상반응이 있습니다.</p>
+          <p><strong>최종 해석: 보상된 호흡성 산증</strong></p>
+        </details>
+      </div>
 
-if(idx===q.c){
-fb.innerHTML="정답!<br>"+q.e;
-fb.style.display="block";
-}else{
-fb.innerHTML="오답!<br>"+q.e;
-fb.style.display="block";
-}
-}
+      <div class="case-card">
+        <h3 class="case-title">케이스 3. 과호흡 환자</h3>
+        <p><strong>환자:</strong> 28세 여자</p>
+        <p><strong>주호소:</strong> 갑작스러운 숨가쁨, 손저림, 어지러움</p>
+        <p><strong>상황:</strong> 불안 증상 호소하며 빠르게 호흡 중</p>
+        <p><strong>활력징후:</strong> BP 126/78 mmHg, HR 118회/분, RR 32회/분</p>
+        <div class="abga-box">
+          <div class="abga-chip"><strong>pH</strong>7.49</div>
+          <div class="abga-chip"><strong>PaCO₂</strong>29 mmHg</div>
+          <div class="abga-chip"><strong>HCO₃⁻</strong>23 mEq/L</div>
+        </div>
+        <details class="edu-item" style="margin-top:12px;">
+          <summary>정답 및 해설 보기</summary>
+          <p>pH가 높아 알칼리증입니다.</p>
+          <p>PaCO₂가 감소되어 알칼리 방향이므로 호흡성 알칼리증입니다.</p>
+        </details>
+      </div>
 
-function next(){
-i++;
-if(i>=quiz.length){
-alert("끝!");
-location.reload();
-}
-load();
-}
+      <div class="case-card">
+        <h3 class="case-title">케이스 4. 반복 구토 환자</h3>
+        <p><strong>환자:</strong> 55세 여자</p>
+        <p><strong>주호소:</strong> 2일간 반복된 구토와 식욕저하</p>
+        <p><strong>활력징후:</strong> BP 104/66 mmHg, HR 102회/분, RR 20회/분</p>
+        <div class="abga-box">
+          <div class="abga-chip"><strong>pH</strong>7.48</div>
+          <div class="abga-chip"><strong>PaCO₂</strong>41 mmHg</div>
+          <div class="abga-chip"><strong>HCO₃⁻</strong>30 mEq/L</div>
+        </div>
+        <details class="edu-item" style="margin-top:12px;">
+          <summary>정답 및 해설 보기</summary>
+          <p>pH가 높아 알칼리증입니다.</p>
+          <p>HCO₃⁻가 증가되어 알칼리 방향이므로 대사성 알칼리증입니다.</p>
+        </details>
+      </div>
+    </section>
 
-load();
+    <section id="quiz" class="panel">
+      <h2 class="section-title">퀴즈</h2>
+      <p class="section-desc">문제은행 50문항 중 랜덤으로 10문항이 출제됩니다. 단순 해석, 보상반응, 개념, 임상 케이스 문제가 섞여 나옵니다.</p>
 
-</script>
+      <div class="quiz-meta">
+        <div class="meta-pill" id="quizProgress">문항 1 / 10</div>
+        <div class="meta-pill" id="quizScore">점수 0점</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-type" id="quizType">유형</div>
+        <div class="quiz-question" id="quizQuestion"></div>
+        <div class="choice-list" id="quizChoices"></div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="nextBtn" onclick="nextQuizQuestion()" style="display:none;">다음 문제</button>
+          <button class="btn btn-secondary" onclick="restartQuiz()">처음부터 다시</button>
+        </div>
+
+        <div class="result-box" id="resultBox">
+          <h3>퀴즈 완료</h3>
+          <p id="resultText"></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">© 대전보훈병원 간호교육실 ABGA 교육용 웹앱</div>
+  </div>
+
+  <script>
+    function showTab(tabId, el) {
+      document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+      el.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showStepFeedback(targetId, isCorrect, text) {
+      const box = document.getElementById(targetId);
+      box.className = "feedback show " + (isCorrect ? "good" : "bad");
+      box.textContent = text;
+    }
+
+    const questionBank = [
+      { type: "단순 해석", q: "pH 7.28 / PaCO₂ 55 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "대사성 알칼리증"], answer: 0, exp: "pH는 산증이고, PaCO₂가 증가하여 같은 방향이므로 호흡성 산증입니다." },
+      { type: "단순 해석", q: "pH 7.50 / PaCO₂ 30 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "정상"], answer: 1, exp: "pH는 알칼리증이며, PaCO₂가 감소하여 알칼리 방향이므로 호흡성 알칼리증입니다." },
+      { type: "단순 해석", q: "pH 7.30 / PaCO₂ 40 / HCO₃⁻ 18 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "대사성 알칼리증", "정상"], answer: 1, exp: "pH는 산증이며, HCO₃⁻가 감소하여 같은 방향이므로 대사성 산증입니다." },
+      { type: "단순 해석", q: "pH 7.48 / PaCO₂ 40 / HCO₃⁻ 30 의 해석은?", choices: ["정상", "호흡성 알칼리증", "대사성 알칼리증", "호흡성 산증"], answer: 2, exp: "pH는 알칼리증이고 HCO₃⁻가 증가하여 알칼리 방향이므로 대사성 알칼리증입니다." },
+      { type: "보상반응", q: "pH 7.32 / PaCO₂ 55 / HCO₃⁻ 30 의 해석은?", choices: ["보상 없는 호흡성 산증", "보상된 호흡성 산증", "대사성 산증", "정상"], answer: 1, exp: "PaCO₂가 증가해 호흡성 산증이며, HCO₃⁻가 반대로 증가해 보상반응이 있습니다." },
+      { type: "보상반응", q: "pH 7.30 / PaCO₂ 30 / HCO₃⁻ 16 의 해석은?", choices: ["보상된 대사성 산증", "호흡성 알칼리증", "정상", "보상된 대사성 알칼리증"], answer: 0, exp: "HCO₃⁻가 감소하여 대사성 산증이고, PaCO₂가 반대로 감소해 보상반응이 있습니다." },
+      { type: "개념", q: "ABGA 기본 해석 순서로 가장 적절한 것은?", choices: ["PaCO₂ → HCO₃⁻ → pH", "pH → PaCO₂ → HCO₃⁻", "HCO₃⁻ → pH → PaCO₂", "순서는 중요하지 않다"], answer: 1, exp: "ABGA는 pH로 방향을 먼저 보고, 이어서 PaCO₂와 HCO₃⁻를 확인합니다." },
+      { type: "개념", q: "PaCO₂는 어떤 요인을 반영하는가?", choices: ["호흡성", "대사성", "신경학적", "심혈관성"], answer: 0, exp: "PaCO₂는 호흡성 요인을 반영합니다." },
+      { type: "개념", q: "HCO₃⁻는 어떤 요인을 반영하는가?", choices: ["호흡성", "대사성", "혈액응고", "체온조절"], answer: 1, exp: "HCO₃⁻는 대사성 요인을 반영합니다." },
+      { type: "개념", q: "pH가 정상 범위여도 ABGA 이상이 있을 수 있는 이유는?", choices: ["검사가 틀렸기 때문", "보상반응이나 혼합장애 가능성", "항상 정상이다", "PaCO₂만 중요하기 때문"], answer: 1, exp: "보상반응이나 혼합장애가 있으면 pH가 정상처럼 보여도 이상이 있을 수 있습니다." },
+      { type: "임상 케이스", q: "COPD 환자, pH 7.33 / PaCO₂ 60 / HCO₃⁻ 32. 가장 적절한 해석은?", choices: ["보상된 호흡성 산증", "정상", "대사성 알칼리증", "보상된 대사성 산증"], answer: 0, exp: "PaCO₂ 증가로 호흡성 산증이며, HCO₃⁻가 반대로 증가해 보상반응이 있습니다." },
+      { type: "임상 케이스", q: "과호흡 환자, pH 7.49 / PaCO₂ 29 / HCO₃⁻ 23. 가장 적절한 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "호흡성 산증", "정상"], answer: 1, exp: "과호흡으로 CO₂가 감소하면 호흡성 알칼리증이 됩니다." },
+      { type: "임상 케이스", q: "반복 구토 환자, pH 7.48 / PaCO₂ 41 / HCO₃⁻ 30. 가장 적절한 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "대사성 산증", "정상"], answer: 0, exp: "구토는 위산 손실과 연결되며 HCO₃⁻ 증가로 대사성 알칼리증을 보입니다." },
+      { type: "임상 케이스", q: "설사 환자, pH 7.30 / PaCO₂ 38 / HCO₃⁻ 18. 가장 적절한 해석은?", choices: ["대사성 산증", "호흡성 산증", "정상", "호흡성 알칼리증"], answer: 0, exp: "설사로 중탄산 손실이 발생하면 대사성 산증을 보일 수 있습니다." },
+      { type: "임상 케이스", q: "불안 발작 후 손저림을 호소하는 환자, RR 32회/분, pH 7.47 / PaCO₂ 31 / HCO₃⁻ 23. 해석은?", choices: ["호흡성 알칼리증", "대사성 산증", "정상", "호흡성 산증"], answer: 0, exp: "과호흡에 의해 CO₂가 감소한 호흡성 알칼리증입니다." },
+      { type: "단순 해석", q: "pH 7.22 / PaCO₂ 48 / HCO₃⁻ 20 에서 가장 우선 확인해야 하는 방향은?", choices: ["산증", "알칼리증", "정상", "보상"], answer: 0, exp: "ABGA 해석은 언제나 pH 방향부터 확인합니다. pH 7.22는 산증입니다." },
+      { type: "개념", q: "보상반응에 대한 설명으로 맞는 것은?", choices: ["문제와 같은 방향으로 움직인다", "문제 아닌 쪽이 반대로 움직인다", "항상 pH를 완전히 정상화한다", "대사성 문제에는 HCO₃⁻가 보상한다"], answer: 1, exp: "보상반응은 문제 아닌 쪽이 반대로 움직이는 현상으로 이해하는 것이 가장 쉽습니다." },
+      { type: "단순 해석", q: "pH 7.52 / PaCO₂ 44 / HCO₃⁻ 33 의 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "pH는 알칼리증이며 HCO₃⁻가 증가하여 대사성 알칼리증입니다." },
+      { type: "단순 해석", q: "pH 7.18 / PaCO₂ 62 / HCO₃⁻ 22 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "pH는 산증이고 PaCO₂가 증가하여 호흡성 산증입니다." },
+      { type: "보상반응", q: "대사성 알칼리증에서 보상은 주로 어떤 방향으로 나타나는가?", choices: ["PaCO₂ 증가", "PaCO₂ 감소", "HCO₃⁻ 감소", "pH 감소"], answer: 0, exp: "대사성 알칼리증에서는 PaCO₂가 증가하는 방향으로 보상이 나타날 수 있습니다." },
+      { type: "개념", q: "ABGA에서 pH가 의미하는 것은?", choices: ["산-염기 상태의 방향", "산소 운반능", "혈압", "체온"], answer: 0, exp: "pH는 현재 혈액의 산-염기 상태의 방향을 보여줍니다." },
+      { type: "단순 해석", q: "pH 7.41 / PaCO₂ 55 / HCO₃⁻ 34 의 해석으로 가장 적절한 것은?", choices: ["정상", "보상된 호흡성 산증 가능성", "대사성 산증", "호흡성 알칼리증"], answer: 1, exp: "pH는 정상 범위지만 PaCO₂와 HCO₃⁻가 모두 올라가 있어 보상된 호흡성 산증 가능성을 생각해야 합니다." },
+      { type: "임상 케이스", q: "패혈증 의심 환자, 저혈압과 젖산 상승, pH 7.25 / PaCO₂ 32 / HCO₃⁻ 15. 해석은?", choices: ["보상된 대사성 산증", "호흡성 산증", "대사성 알칼리증", "정상"], answer: 0, exp: "HCO₃⁻ 감소로 대사성 산증이며, PaCO₂ 감소는 보상반응입니다." },
+      { type: "보상반응", q: "호흡성 산증에서 보상반응으로 기대되는 것은?", choices: ["HCO₃⁻ 증가", "HCO₃⁻ 감소", "PaCO₂ 감소", "pH 증가"], answer: 0, exp: "호흡성 산증에서는 HCO₃⁻가 증가하는 방향으로 보상이 나타날 수 있습니다." },
+      { type: "보상반응", q: "대사성 산증에서 보상반응으로 기대되는 것은?", choices: ["PaCO₂ 감소", "PaCO₂ 증가", "HCO₃⁻ 증가", "pH 증가"], answer: 0, exp: "대사성 산증에서는 PaCO₂가 감소하는 방향으로 보상반응이 나타납니다." },
+      { type: "개념", q: "다음 중 대사성 요인에 해당하는 것은?", choices: ["HCO₃⁻", "PaCO₂", "RR", "SpO₂"], answer: 0, exp: "HCO₃⁻는 대사성 요인입니다." },
+      { type: "개념", q: "다음 중 호흡성 요인에 해당하는 것은?", choices: ["PaCO₂", "HCO₃⁻", "젖산", "혈압"], answer: 0, exp: "PaCO₂는 호흡성 요인입니다." },
+      { type: "임상 케이스", q: "기관지천식 악화 환자, pH 7.26 / PaCO₂ 58 / HCO₃⁻ 25. 해석은?", choices: ["호흡성 산증", "대사성 산증", "호흡성 알칼리증", "정상"], answer: 0, exp: "환기 저하로 CO₂가 축적되어 호흡성 산증이 나타납니다." },
+      { type: "임상 케이스", q: "장기간 구토 환자, pH 7.50 / PaCO₂ 47 / HCO₃⁻ 34. 해석은?", choices: ["보상된 대사성 알칼리증", "호흡성 알칼리증", "정상", "대사성 산증"], answer: 0, exp: "HCO₃⁻ 증가로 대사성 알칼리증이며, PaCO₂ 증가가 보상방향입니다." },
+      { type: "단순 해석", q: "pH 7.34 / PaCO₂ 50 / HCO₃⁻ 26 의 해석은?", choices: ["호흡성 산증", "정상", "대사성 산증", "호흡성 알칼리증"], answer: 0, exp: "pH는 산증 쪽이고 PaCO₂가 증가하여 호흡성 산증입니다." },
+      { type: "단순 해석", q: "pH 7.46 / PaCO₂ 32 / HCO₃⁻ 22 의 해석은?", choices: ["호흡성 알칼리증", "대사성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "pH는 알칼리증이며 PaCO₂가 감소하여 호흡성 알칼리증입니다." },
+      { type: "단순 해석", q: "pH 7.31 / PaCO₂ 39 / HCO₃⁻ 17 의 해석은?", choices: ["대사성 산증", "호흡성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "HCO₃⁻ 감소가 핵심이므로 대사성 산증입니다." },
+      { type: "개념", q: "다음 중 ABGA 해석 시 가장 먼저 보는 수치는?", choices: ["pH", "PaCO₂", "HCO₃⁻", "PaO₂"], answer: 0, exp: "가장 먼저 pH로 방향을 확인합니다." },
+      { type: "임상 케이스", q: "불안으로 과호흡하는 환자에서 가장 먼저 예상되는 변화는?", choices: ["PaCO₂ 감소", "PaCO₂ 증가", "HCO₃⁻ 증가", "pH 감소"], answer: 0, exp: "과호흡은 CO₂를 과도하게 배출시켜 PaCO₂를 감소시킵니다." },
+      { type: "개념", q: "pH 7.35는 어떤 의미로 볼 수 있는가?", choices: ["정상 범위의 하한", "항상 산증", "항상 알칼리증", "의미 없음"], answer: 0, exp: "7.35는 정상 범위에 포함되지만 하한선입니다." },
+      { type: "보상반응", q: "보상반응이 있다고 해서 항상 맞는 설명은?", choices: ["pH가 완전히 정상화된다", "문제 아닌 쪽이 반대 방향으로 움직인다", "혼합장애가 없다", "이상 소견이 사라진다"], answer: 1, exp: "보상반응이 있어도 pH가 완전히 정상화되지 않을 수 있습니다." },
+      { type: "단순 해석", q: "pH 7.51 / PaCO₂ 47 / HCO₃⁻ 35 의 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "알칼리증이며 HCO₃⁻ 증가가 핵심이므로 대사성 알칼리증입니다." },
+      { type: "임상 케이스", q: "탈수와 지속적 설사를 보이는 환자의 대표적 ABGA 변화는?", choices: ["대사성 산증", "호흡성 산증", "대사성 알칼리증", "정상"], answer: 0, exp: "설사로 HCO₃⁻ 손실이 발생하면 대사성 산증을 보일 수 있습니다." },
+      { type: "임상 케이스", q: "COPD 환자에서 만성적으로 기대할 수 있는 보상반응은?", choices: ["HCO₃⁻ 증가", "HCO₃⁻ 감소", "PaCO₂ 감소", "pH 상승만"], answer: 0, exp: "만성 CO₂ 저류 상태에서는 HCO₃⁻가 증가하는 보상이 나타날 수 있습니다." },
+      { type: "개념", q: "PaCO₂ 증가가 의미하는 방향은?", choices: ["산성 방향", "알칼리 방향", "중성", "대사성 방향"], answer: 0, exp: "CO₂가 증가하면 산성 방향으로 작용합니다." },
+      { type: "개념", q: "HCO₃⁻ 감소가 의미하는 방향은?", choices: ["산성 방향", "알칼리 방향", "호흡성 방향", "무의미"], answer: 0, exp: "HCO₃⁻가 감소하면 산성 방향으로 작용합니다." },
+      { type: "단순 해석", q: "pH 7.24 / PaCO₂ 30 / HCO₃⁻ 14 의 해석은?", choices: ["보상된 대사성 산증", "호흡성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "HCO₃⁻ 감소로 대사성 산증이고 PaCO₂ 감소는 보상반응입니다." },
+      { type: "단순 해석", q: "pH 7.47 / PaCO₂ 50 / HCO₃⁻ 34 의 해석은?", choices: ["보상된 대사성 알칼리증", "호흡성 알칼리증", "정상", "대사성 산증"], answer: 0, exp: "HCO₃⁻ 증가가 핵심이며 PaCO₂ 증가가 보상방향입니다." },
+      { type: "임상 케이스", q: "진정제 과다복용 후 저환기 환자에서 가장 기대되는 변화는?", choices: ["PaCO₂ 증가", "PaCO₂ 감소", "HCO₃⁻ 감소", "pH 증가"], answer: 0, exp: "저환기는 CO₂ 배출 감소로 PaCO₂ 증가를 초래합니다." },
+      { type: "개념", q: "혼합장애를 의심해야 하는 상황은?", choices: ["수치들이 단순한 한 가지 패턴으로 설명되지 않을 때", "pH가 항상 정상일 때만", "PaCO₂만 변할 때", "HCO₃⁻만 변할 때"], answer: 0, exp: "수치가 단순한 한 가지 패턴으로 설명되지 않으면 혼합장애 가능성을 생각해야 합니다." },
+      { type: "임상 케이스", q: "패닉 상태의 젊은 환자, 손저림, 어지러움, RR 증가. 우선 의심되는 것은?", choices: ["호흡성 알칼리증", "호흡성 산증", "대사성 산증", "정상"], answer: 0, exp: "과호흡은 호흡성 알칼리증과 연결됩니다." },
+      { type: "임상 케이스", q: "쇼크와 저관류가 있는 환자에서 젖산 상승과 함께 흔한 산-염기 변화는?", choices: ["대사성 산증", "대사성 알칼리증", "호흡성 알칼리증", "정상"], answer: 0, exp: "젖산 축적은 대사성 산증을 유발할 수 있습니다." },
+      { type: "개념", q: "다음 중 pH를 완전히 정상으로 되돌리지 못할 수 있는 것은?", choices: ["보상반응", "정상 호흡", "정상 대사", "수분섭취"], answer: 0, exp: "보상반응이 있어도 pH가 완전히 정상으로 돌아오지 않을 수 있습니다." },
+      { type: "단순 해석", q: "pH 7.29 / PaCO₂ 57 / HCO₃⁻ 26 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "정상", "호흡성 알칼리증"], answer: 0, exp: "pH는 산증, PaCO₂ 증가는 같은 방향으로 호흡성 산증입니다." },
+      { type: "단순 해석", q: "pH 7.45 / PaCO₂ 28 / HCO₃⁻ 19 의 상황을 볼 때 고려할 것은?", choices: ["보상된 이상 가능성", "항상 정상", "해석 불필요", "대사성 알칼리증 확정"], answer: 0, exp: "pH가 정상 상한에 있어도 CO₂와 HCO₃⁻ 이상이 있으면 보상된 상태를 생각해야 합니다." }
+    ];
+
+    let quizData = [];
+    let currentQuiz = 0;
+    let score = 0;
+    let answered = false;
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initializeQuiz() {
+      quizData = shuffleArray(questionBank).slice(0, 10);
+      currentQuiz = 0;
+      score = 0;
+      answered = false;
+      document.getElementById("resultBox").style.display = "none";
+      loadQuizQuestion();
+    }
+
+    function loadQuizQuestion() {
+      answered = false;
+      const q = quizData[currentQuiz];
+
+      document.getElementById("quizType").textContent = q.type;
+      document.getElementById("quizQuestion").innerHTML = q.q;
+      document.getElementById("quizProgress").textContent = `문항 ${currentQuiz + 1} / ${quizData.length}`;
+      document.getElementById("quizScore").textContent = `점수 ${score}점`;
+
+      const choicesBox = document.getElementById("quizChoices");
+      choicesBox.innerHTML = "";
+
+      q.choices.forEach((choice, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        btn.textContent = choice;
+        btn.onclick = () => selectQuizAnswer(idx);
+        choicesBox.appendChild(btn);
+      });
+
+      const feedback = document.getElementById("quizFeedback");
+      feedback.className = "quiz-feedback";
+      feedback.style.display = "none";
+      feedback.innerHTML = "";
+
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function selectQuizAnswer(selectedIdx) {
+      if (answered) return;
+      answered = true;
+
+      const q = quizData[currentQuiz];
+      const buttons = document.querySelectorAll("#quizChoices .choice-btn");
+      const feedback = document.getElementById("quizFeedback");
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.answer) {
+          btn.classList.add("correct");
+        }
+      });
+
+      if (selectedIdx === q.answer) {
+        score += 10;
+        feedback.className = "quiz-feedback good";
+        feedback.innerHTML = `<strong>정답입니다.</strong><div class="explain">${q.exp}</div>`;
+      } else {
+        buttons[selectedIdx].classList.add("incorrect");
+        feedback.className = "quiz-feedback bad";
+        feedback.innerHTML = `<strong>오답입니다.</strong><div class="explain">${q.exp}</div>`;
+      }
+
+      feedback.style.display = "block";
+      document.getElementById("quizScore").textContent = `점수 ${score}점`;
+
+      if (currentQuiz < quizData.length - 1) {
+        document.getElementById("nextBtn").style.display = "inline-block";
+      } else {
+        showQuizResult();
+      }
+    }
+
+    function nextQuizQuestion() {
+      currentQuiz += 1;
+      loadQuizQuestion();
+    }
+
+    function showQuizResult() {
+      const resultBox = document.getElementById("resultBox");
+      const correctCount = score / 10;
+      resultBox.style.display = "block";
+      document.getElementById("resultText").textContent =
+        `총 ${quizData.length}문항 중 ${correctCount}문항 정답, 최종 점수는 ${score}점입니다.`;
+    }
+
+    function restartQuiz() {
+      initializeQuiz();
+    }
+
+    initializeQuiz();
+  </script>
 </body>
 </html>
